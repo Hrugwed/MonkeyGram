@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="120" viewBox="0 0 420 120">
+  <!-- Monkey icon -->
+  <g transform="translate(20,20) scale(1.2)">
+    <!-- Head -->
+    <circle cx="30" cy="30" r="25" fill="#4f46e5"/>
+    <!-- Ears -->
+    <circle cx="5" cy="30" r="11" fill="#4f46e5"/>
+    <circle cx="55" cy="30" r="11" fill="#4f46e5"/>
+    <!-- Face patch -->
+    <ellipse cx="30" cy="38" rx="18" ry="14" fill="white" opacity="0.85"/>
+    <!-- Eyes -->
+    <circle cx="22" cy="25" r="4" fill="white"/>
+    <circle cx="38" cy="25" r="4" fill="white"/>
+    <!-- Smile -->
+    <path d="M20 40 Q30 48 40 40" stroke="#4f46e5" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Text -->
+  <text x="100" y="68" font-family="Outfit, Arial, sans-serif" font-size="44" font-weight="600" fill="#4f46e5">
+    monkeygram
+  </text>
+</svg>
