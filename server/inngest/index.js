@@ -13,14 +13,18 @@ const syncUserCreation = inngest.createFunction(
     {id: 'sync-user-from-clerk'},
     {event: 'clerk/user.created'},
     async ({event})=>{
+        console.error('Inngest: syncUserCreation function triggered for user:', event.data.id);
         const {id, first_name, last_name, email_addresses, image_url} = event.data
         let username = email_addresses[0].email_address.split('@')[0]
+
+        console.error('Inngest: Processing user data:', {id, first_name, last_name, email: email_addresses[0].email_address, username});
 
         // Check availability of username
         const user = await User.findOne({username})
 
         if (user) {
             username = username + Math.floor(Math.random() * 10000)
+            console.error('Inngest: Username taken, using:', username);
         }
 
         const userData = {
@@ -30,10 +34,12 @@ const syncUserCreation = inngest.createFunction(
             profile_picture: image_url,
             username
         }
+        console.error('Inngest: userData prepared for MongoDB:', userData);
         try {
             await User.create(userData)
+            console.error('Inngest: User successfully created in MongoDB for ID:', id);
         } catch (error) {
-            console.error('Inngest: Error creating user in MongoDB:', error); // Keeping existing error log for actual errors
+            console.error('Inngest: Error creating user in MongoDB:', error);
             throw error;
         }
     }
