@@ -339,3 +339,23 @@ export const getUserProfiles = async (req, res) =>{
         res.json({success: false, message: error.message})
     }
 }
+
+// Get User Liked Posts
+export const getUserLikedPosts = async (req, res) => {
+    try {
+        const { userId } = req.auth();
+        const { profileId } = req.body;
+        
+        // Use profileId if provided, otherwise use current user
+        const targetUserId = profileId || userId;
+        
+        const posts = await Post.find({
+            likes_count: targetUserId
+        }).populate('user').sort({createdAt: -1});
+
+        res.json({ success: true, posts });
+    } catch (error) {
+        console.error('Error in getUserLikedPosts:', error);
+        res.json({ success: false, message: error.message });
+    }
+}
