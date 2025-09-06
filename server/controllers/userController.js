@@ -11,9 +11,7 @@ import { clerkClient } from "@clerk/express";
 export const getUserData = async (req, res) => {
     try {
         const { userId } = req.auth()
-        console.log('getUserData: userId', userId); // Added log
         const user = await User.findById(userId)
-        console.log('getUserData: user from DB', user); // Added log
         if(!user){
             return res.json({success: false, message: "User not found"})
         }
@@ -225,9 +223,7 @@ export const sendConnectionRequest = async (req, res) => {
 export const getUserConnections = async (req, res) => {
     try {
         const {userId} = req.auth()
-        console.log('getUserConnections: userId', userId); // Added log
         const user = await User.findById(userId).populate('connections followers following')
-        console.log('getUserConnections: user with populated connections', user); // Added log
 
         if(!user){
             return res.json({success: false, message: "User not found in database"})

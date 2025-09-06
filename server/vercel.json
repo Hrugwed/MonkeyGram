@@ -9,9 +9,17 @@
                     "dist/**"
                 ]
             }
+        },
+        {
+            "src": "api/inngest.js",
+            "use": "@vercel/node"
         }
     ],
     "routes": [
+        {
+            "src": "/api/inngest",
+            "dest": "api/inngest.js"
+        },
         {
             "src": "/(.*)",
             "dest": "server.js"
