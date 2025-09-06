@@ -8,9 +8,11 @@ const initialState = {
 }
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async (token) => {
+    console.log('Fetching user data with token:', token?.substring(0, 20) + '...')
     const { data } = await api.get('/api/user/data', {
         headers: {Authorization: `Bearer ${token}`}
     })
+    console.log('User data response:', data.success ? 'Success' : 'Failed', data.user?.username || 'No username')
     return data.success ? data.user : null
 })
 
@@ -38,6 +40,7 @@ const userSlice = createSlice({
     },
     extraReducers: (builder)=>{
         builder.addCase(fetchUser.fulfilled, (state, action)=>{
+            console.log('User state updated with:', action.payload?.username || 'No user')
             state.value = action.payload
         }).addCase(updateUser.fulfilled, (state, action)=>{
             state.value = action.payload

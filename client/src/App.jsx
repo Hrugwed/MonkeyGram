@@ -13,9 +13,9 @@ import Layout from './pages/Layout'
 import toast, {Toaster} from 'react-hot-toast'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { fetchUser } from './features/user/userSlice'
-import { fetchConnections } from './features/connections/connectionsSlice'
-import { addMessage } from './features/messages/messagesSlice'
+import { fetchUser, resetUser } from './features/user/userSlice'
+import { fetchConnections, resetConnections } from './features/connections/connectionsSlice'
+import { addMessage, resetMessages } from './features/messages/messagesSlice'
 import Notification from './components/Notification'
 
 const App = () => {
@@ -29,9 +29,22 @@ const App = () => {
   useEffect(()=>{
     const fetchData = async () => {
       if(user){
-      const token = await getToken()
-      dispatch(fetchUser(token))
-      dispatch(fetchConnections(token))
+        console.log('New user detected:', user.id, user.emailAddresses[0]?.emailAddress)
+        // Clear previous user's data first
+        dispatch(resetUser())
+        dispatch(resetConnections())
+        dispatch(resetMessages())
+        
+        // Fetch new user's data
+        const token = await getToken()
+        dispatch(fetchUser(token))
+        dispatch(fetchConnections(token))
+      } else {
+        console.log('No user, clearing all data')
+        // If no user, clear all data
+        dispatch(resetUser())
+        dispatch(resetConnections())
+        dispatch(resetMessages())
       }
     }
     fetchData()
