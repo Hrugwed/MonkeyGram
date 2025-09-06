@@ -32,7 +32,9 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-
+        resetUser: (state) => {
+            state.value = null
+        }
     },
     extraReducers: (builder)=>{
         builder.addCase(fetchUser.fulfilled, (state, action)=>{
@@ -43,4 +45,5 @@ const userSlice = createSlice({
     }
 })
 
+export const { resetUser } = userSlice.actions
 export default userSlice.reducer

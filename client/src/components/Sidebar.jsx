@@ -4,13 +4,32 @@ import { Link, useNavigate } from 'react-router-dom'
 import MenuItems from './MenuItems'
 import { CirclePlus, LogOut } from 'lucide-react'
 import {UserButton, useClerk} from '@clerk/clerk-react'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { resetMessages } from '../features/messages/messagesSlice';
+import { resetUser } from '../features/user/userSlice';
+import { resetConnections } from '../features/connections/connectionsSlice';
 
 const Sidebar = ({sidebarOpen, setSidebarOpen}) => {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const user = useSelector((state) => state.user.value)
     const {signOut} = useClerk()
+
+    const handleLogout = async () => {
+        try {
+            // Clear all Redux state
+            dispatch(resetMessages())
+            dispatch(resetUser())
+            dispatch(resetConnections())
+            // Sign out from Clerk
+            await signOut()
+            // Navigate to login page
+            navigate('/')
+        } catch (error) {
+            console.error('Logout error:', error)
+        }
+    }
 
   return (
     <div className={`w-60 xl:w-72 bg-white border-r border-gray-200 flex flex-col justify-between items-center max-sm:absolute top-0 bottom-0 z-20 ${sidebarOpen ? 'translate-x-0' : 'max-sm:-translate-x-full'} transition-all duration-300 ease-in-out`}>
@@ -34,7 +53,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}) => {
                     <p className='text-xs text-gray-500'>@{user.username}</p>
                 </div>
             </div>
-            <LogOut onClick={signOut} className='w-4.5 text-gray-400 hover:text-gray-700 transition cursor-pointer'/>
+            <LogOut onClick={handleLogout} className='w-4.5 text-gray-400 hover:text-gray-700 transition cursor-pointer'/>
         </div>
 
     </div>
