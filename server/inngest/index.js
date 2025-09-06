@@ -13,7 +13,7 @@ const syncUserCreation = inngest.createFunction(
     {id: 'sync-user-from-clerk'},
     {event: 'clerk/user.created'},
     async ({event})=>{
-        console.log('Inngest: syncUserCreation function triggered for user:', event.data.id); // Added log
+        console.error('Inngest: syncUserCreation function triggered for user:', event.data.id); // Changed to console.error
         const {id, first_name, last_name, email_addresses, image_url} = event.data
         let username = email_addresses[0].email_address.split('@')[0]
 
@@ -31,12 +31,13 @@ const syncUserCreation = inngest.createFunction(
             profile_picture: image_url,
             username
         }
-        console.log('Inngest: userData prepared for MongoDB:', userData); // Added log
+        console.error('Inngest: userData prepared for MongoDB:', userData); // Changed to console.error
         try {
             await User.create(userData)
-            console.log('Inngest: User successfully created in MongoDB for ID:', id); // Added log
+            console.error('Inngest: User successfully created in MongoDB for ID:', id); // Changed to console.error
         } catch (error) {
-            console.error('Inngest: Error creating user in MongoDB:', error); // Added log
+            console.error('Inngest: Error creating user in MongoDB:', error); // Changed to console.error
+            throw error; // Re-throw the error to ensure Vercel catches it
         }
     }
 )
